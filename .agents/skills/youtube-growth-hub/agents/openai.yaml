@@ -1,0 +1,6 @@
+interface:
+  display_name: "Youtube Growth Hub"
+  short_description: "Repo-specific patterns and workflows for youtube-growth-hub"
+  default_prompt: "Use the youtube-growth-hub repo skill to follow existing architecture, testing, and workflow conventions."
+policy:
+  allow_implicit_invocation: true
