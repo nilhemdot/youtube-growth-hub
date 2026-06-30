@@ -1,0 +1,15 @@
+{
+  "name": "discord-meilisearch-pipeline",
+  "version": "0.1.0",
+  "description": "Discord public-content search pipeline (bot + worker + Meilisearch) - helper npm scripts for local dev",
+  "main": "index.js",
+  "scripts": {
+    "dev": "docker-compose up --build",
+    "start": "docker-compose up",
+    "meili:init": "python scripts/init_meili.py",
+    "bot:run": "python bot/bot.py",
+    "worker:run": "python worker/worker.py"
+  },
+  "author": "nilhemdot",
+  "license": "MIT"
+}
