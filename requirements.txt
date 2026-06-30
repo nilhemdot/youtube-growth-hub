@@ -1,6 +1,6 @@
 discord.py==2.3.2
 redis==4.6.0
-meilisearch==1.2.0
+meilisearch==0.42.0
 python-dotenv==1.0.0
 openai==1.0.0
 requests==2.31.0
