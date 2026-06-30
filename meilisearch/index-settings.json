@@ -1,0 +1,13 @@
+{
+  "searchableAttributes": ["content","author_name","channel_name"],
+  "displayedAttributes": ["id","guild_id","channel_id","author_id","author_name","content","timestamp"],
+  "filterableAttributes": ["guild_id","channel_id","author_id"],
+  "rankingRules": [
+    "typo",
+    "words",
+    "proximity",
+    "attribute",
+    "sort",
+    "exactness"
+  ]
+}
