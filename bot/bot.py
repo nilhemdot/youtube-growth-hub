@@ -10,7 +10,9 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 REDIS_URL = os.getenv('REDIS_URL', 'redis://redis:6379/0')
 
 intents = discord.Intents.default()
-intents.message_content = True
+# Message Content Intent is privileged; enable it in Discord Developer Portal if needed.
+ENABLE_MESSAGE_CONTENT = os.getenv('ENABLE_MESSAGE_CONTENT', 'false').lower() in ('1', 'true', 'yes')
+intents.message_content = ENABLE_MESSAGE_CONTENT
 intents.guilds = True
 intents.messages = True
 
