@@ -26,7 +26,8 @@ def ensure_index():
 
 # simple helper to index a document into Meilisearch
 def index_document(doc):
-    headers = {'X-Meili-API-Key': MEILI_KEY} if MEILI_KEY else {}
+    # Meilisearch uses a Bearer token in the Authorization header in newer versions
+    headers = {'Authorization': f'Bearer {MEILI_KEY}'} if MEILI_KEY else {}
     url = f"{MEILI_URL}/indexes/{MEILI_INDEX}/documents"
     resp = requests.post(url, json=[doc], headers=headers)
     if not resp.ok:
