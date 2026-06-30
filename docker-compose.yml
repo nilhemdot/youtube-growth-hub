@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  meilisearch:
+    image: getmeili/meilisearch:latest
+    ports:
+      - '7700:7700'
+    environment:
+      MEILI_MASTER_KEY: '${MEILI_MASTER_KEY:-masterKey}'
+    volumes:
+      - meili_data:/data.ms
+  redis:
+    image: redis:7-alpine
+    ports:
+      - '6379:6379'
+  bot:
+    build: .
+    command: python bot/bot.py
+    env_file: .env
+    depends_on:
+      - redis
+    restart: unless-stopped
+  worker:
+    build: .
+    command: python worker/worker.py
+    env_file: .env
+    depends_on:
+      - redis
+      - meilisearch
+    restart: unless-stopped
+volumes:
+  meili_data:
