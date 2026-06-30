@@ -1,4 +1,4 @@
-discord.py==2.3.3
+discord.py==2.3.2
 redis==4.7.0
 meilisearch==1.2.0
 python-dotenv==1.0.0
