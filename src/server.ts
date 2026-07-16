@@ -9,7 +9,7 @@ import { uploadVideo } from './youtubeUpload';
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5050;
 
 const upload = multer({ dest: 'uploads/' });
 
@@ -102,6 +102,8 @@ app.post('/upload', upload.single('video'), async (req, res) => {
     res.send(`Upload successful! Video ID: ${result.id}`);
   } catch (error) {
     console.error('Error uploading video:', error);
+    // Clean up uploaded file on failure too
+    try { fs.unlinkSync(req.file.path); } catch (_) {}
     res.status(500).send('Video upload failed.');
   }
 });
