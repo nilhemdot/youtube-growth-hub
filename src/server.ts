@@ -13,6 +13,15 @@ const port = process.env.PORT || 5050;
 
 const upload = multer({ dest: 'uploads/' });
 
+// Escape user-controlled values before embedding them in HTML responses
+const escapeHtml = (value: string): string =>
+  value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+
 app.get('/oauth-setup', (req, res) => {
   const cfg = getOAuthConfig();
   res.send(`
@@ -82,8 +91,8 @@ app.get('/oauth2callback', async (req, res) => {
     const cfg = getOAuthConfig();
     const msg = error instanceof Error ? error.message : String(error);
     res.status(500).send(
-      `Authentication failed: ${msg}<br/><br/>` +
-      `Registered redirect URI: <code>${cfg.redirectUri}</code><br/>` +
+      `Authentication failed: ${escapeHtml(msg)}<br/><br/>` +
+      `Registered redirect URI: <code>${escapeHtml(cfg.redirectUri)}</code><br/>` +
       `<a href="/oauth-setup">OAuth setup debug</a>`
     );
   }
@@ -98,7 +107,7 @@ app.post('/upload', upload.single('video'), async (req, res) => {
   try {
     const result = await uploadVideo(req.file.path, title, description, tags ? tags.split(',') : []);
     // Clean up uploaded file
-    fs.unlinkSync(req.file.path);
+    try { fs.unlinkSync(req.file.path); } catch (_) {}
     res.send(`Upload successful! Video ID: ${result.id}`);
   } catch (error) {
     console.error('Error uploading video:', error);
@@ -108,7 +117,11 @@ app.post('/upload', upload.single('video'), async (req, res) => {
   }
 });
 
-app.listen(port, () => {
+// Bind to loopback only so the unauthenticated upload/OAuth routes are not
+// exposed on all network interfaces. Override with HOST=0.0.0.0 if needed.
+const host = process.env.HOST || '127.0.0.1';
+
+app.listen(port, host, () => {
   const cfg = getOAuthConfig();
   console.log(`Server is running on http://127.0.0.1:${port}`);
   console.log(`OAuth debug: http://127.0.0.1:${port}/oauth-setup`);
