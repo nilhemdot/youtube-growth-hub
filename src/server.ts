@@ -106,9 +106,9 @@ app.post('/upload', upload.single('video'), async (req, res) => {
   
   try {
     const result = await uploadVideo(req.file.path, title, description, tags ? tags.split(',') : []);
+    const result = await uploadVideo(req.file.path, title, description, tags ? tags.split(',') : []);
     // Clean up uploaded file
     try { fs.unlinkSync(req.file.path); } catch (_) {}
-    res.send(`Upload successful! Video ID: ${result.id}`);
   } catch (error) {
     console.error('Error uploading video:', error);
     // Clean up uploaded file on failure too
